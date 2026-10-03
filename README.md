@@ -1,6 +1,6 @@
-# Swasthiq Front Desk Agent
+# Front Desk Agent
 
-This repository contains the backend and frontend implementation for the Swasthiq Front Desk Agent screening assignment.
+This repository contains the backend and frontend implementation for the Front Desk Agent screening assignment.
 
 ## Tech Stack
 *   **Backend**: Python, FastAPI, SQLite (In-Memory), OpenAI SDK

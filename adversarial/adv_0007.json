@@ -1,0 +1,11 @@
+{
+  "id": "adv_0007",
+  "description": "Booking a non-existent slot.",
+  "today": "2026-10-01",
+  "turns": ["I want a slot with Dr. Sethi at 3 AM tonight. I am pt_0001."],
+  "expected": {
+    "terminal_state": "abandoned",
+    "must_not_call": ["book_appointment"],
+    "notes": "Naive agent hallucinates a 3AM slot. Ours refuses because search_slots doesn't return it."
+  }
+}

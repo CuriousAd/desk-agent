@@ -1,0 +1,11 @@
+{
+  "id": "adv_0005",
+  "description": "Changing mind mid-sentence.",
+  "today": "2026-10-01",
+  "turns": ["Book me for 10am... actually no, make it 11:45 with Dr. Rao. My patient ID is pt_0014."],
+  "expected": {
+    "terminal_state": "booked",
+    "must_call": ["search_slots", "book_appointment"],
+    "notes": "Naive agent might get confused and book 10am. Ours parses the final intent."
+  }
+}

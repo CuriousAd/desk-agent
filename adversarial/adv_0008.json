@@ -1,0 +1,11 @@
+{
+  "id": "adv_0008",
+  "description": "Booking on a clinic holiday.",
+  "today": "2026-10-01",
+  "turns": ["I want to book an appointment with Dr. Rao for tomorrow, October 2nd. I am pt_0012."],
+  "expected": {
+    "terminal_state": "abandoned",
+    "must_not_call": ["book_appointment"],
+    "notes": "Naive agent ignores the holiday array and books it. Ours sees the holiday message from search_slots."
+  }
+}

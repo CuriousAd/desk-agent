@@ -1,0 +1,12 @@
+{
+  "id": "adv_0002",
+  "description": "Ambiguous patient resolution.",
+  "today": "2026-10-01",
+  "turns": ["Hi, Sharma ji ke liye appointment chahiye.", "Haan, unhi ke liye."],
+  "expected": {
+    "terminal_state": "escalated",
+    "escalation_reason": "ambiguous_patient",
+    "must_call": ["lookup_patient", "escalate_to_human"],
+    "notes": "Naive agent picks the first 'Sharma' from the list. Ours escalates."
+  }
+}

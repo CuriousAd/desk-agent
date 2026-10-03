@@ -1,0 +1,23 @@
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Python
+backend/venv/
+backend/__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Planning Artifacts
+swasthiq_architecture_plan.md
+implementation_plan.md

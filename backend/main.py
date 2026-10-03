@@ -1,10 +1,35 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import sys
 
-from .schemas import TurnRequest, AgentResponse
-from .database import create_db
-from .agent import run_agent
+# Automatically load .env if present
+def load_env():
+    for path in [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    ]:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        k = k.strip()
+                        v = v.strip().strip("'\"")
+                        if k not in os.environ:
+                            os.environ[k] = v
+
+load_env()
+
+try:
+    from schemas import TurnRequest, AgentResponse
+    from database import create_db
+    from agent import run_agent
+except ImportError:
+    from .schemas import TurnRequest, AgentResponse
+    from .database import create_db
+    from .agent import run_agent
 
 app = FastAPI(title="Swasthiq Front Desk API")
 

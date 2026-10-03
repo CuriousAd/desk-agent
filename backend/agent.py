@@ -3,11 +3,22 @@ import json
 import time
 from openai import OpenAI
 from pydantic import ValidationError
-from .schemas import AgentResponse, ToolCallSchema
-from .tools import (search_slots, book_appointment, reschedule_appointment, 
-                    cancel_appointment, lookup_patient, escalate_to_human)
+try:
+    from schemas import AgentResponse, ToolCallSchema
+    from tools import (search_slots, book_appointment, reschedule_appointment, 
+                        cancel_appointment, lookup_patient, escalate_to_human)
+except ImportError:
+    from .schemas import AgentResponse, ToolCallSchema
+    from .tools import (search_slots, book_appointment, reschedule_appointment, 
+                        cancel_appointment, lookup_patient, escalate_to_human)
 
-client = OpenAI() # Assumes OPENAI_API_KEY is set in environment
+_client = None
+
+def get_openai_client():
+    global _client
+    if _client is None:
+        _client = OpenAI()
+    return _client
 
 EMERGENCY_KEYWORDS = [
     "chest pain", "heart attack", "bleeding", "emergency", "unconscious", 
@@ -183,6 +194,7 @@ def run_agent(conversation_id: str, today: str, turns: list[str], conn) -> Agent
     final_reply = ""
     
     while True:
+        client = get_openai_client()
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,

@@ -12,13 +12,45 @@ except ImportError:
     from .tools import (search_slots, book_appointment, reschedule_appointment, 
                         cancel_appointment, lookup_patient, escalate_to_human)
 
-_client = None
+import itertools
+
+_clients = {}
+_groq_key_cycle = None
+
+def get_next_groq_key():
+    global _groq_key_cycle
+    
+    # Try multiple keys first
+    keys_str = os.environ.get("GROQ_API_KEYS", "")
+    if keys_str:
+        if _groq_key_cycle is None:
+            keys = [k.strip() for k in keys_str.split(",") if k.strip()]
+            if keys:
+                _groq_key_cycle = itertools.cycle(keys)
+        if _groq_key_cycle:
+            return next(_groq_key_cycle)
+            
+    # Fallback to single key
+    return os.environ.get("GROQ_API_KEY")
 
 def get_openai_client():
-    global _client
-    if _client is None:
-        _client = OpenAI()
-    return _client
+    global _clients
+    
+    groq_key = get_next_groq_key()
+    if groq_key:
+        if groq_key not in _clients:
+            _clients[groq_key] = OpenAI(
+                api_key=groq_key,
+                base_url="https://api.groq.com/openai/v1"
+            )
+        return _clients[groq_key]
+        
+    if "openai" not in _clients:
+        _clients["openai"] = OpenAI()
+    return _clients["openai"]
+
+def get_model_name():
+    return "qwen/qwen3.8-27b" if get_next_groq_key() else "gpt-4o-mini"
 
 EMERGENCY_KEYWORDS = [
     "chest pain", "heart attack", "bleeding", "emergency", "unconscious", 
@@ -196,7 +228,7 @@ def run_agent(conversation_id: str, today: str, turns: list[str], conn) -> Agent
     while True:
         client = get_openai_client()
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=get_model_name(),
             messages=messages,
             tools=tools,
             temperature=0.0

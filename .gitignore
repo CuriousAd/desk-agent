@@ -21,3 +21,8 @@ Thumbs.db
 # Planning Artifacts
 swasthiq_architecture_plan.md
 implementation_plan.md
+
+# Test results & Vercel
+results/
+.vercel/
+

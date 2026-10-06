@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
+    { "source": "/agent/:path*", "destination": "/api/index.py" },
+    { "source": "/agent", "destination": "/api/index.py" },
+    { "source": "/api/:path*", "destination": "/api/index.py" },
+    { "source": "/api", "destination": "/api/index.py" }
+  ]
+}

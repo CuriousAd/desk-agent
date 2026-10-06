@@ -3,11 +3,19 @@ import json
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CLINIC_JSON_PATH = os.path.join(BASE_DIR, "clinic.json")
+POSSIBLE_CLINIC_PATHS = [
+    os.path.join(BASE_DIR, "clinic.json"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "clinic.json"),
+    os.path.join(os.getcwd(), "clinic.json"),
+    os.path.join(os.getcwd(), "backend", "clinic.json")
+]
 
 def load_clinic_data():
-    with open(CLINIC_JSON_PATH, "r") as f:
-        return json.load(f)
+    for path in POSSIBLE_CLINIC_PATHS:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+    raise FileNotFoundError(f"clinic.json not found in any of: {POSSIBLE_CLINIC_PATHS}")
 
 CLINIC_DATA = load_clinic_data()
 

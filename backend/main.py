@@ -41,10 +41,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return {"status": "healthy", "service": "Swasthiq Front Desk API"}
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
 @app.post("/agent/run", response_model=AgentResponse)
+@app.post("/run", response_model=AgentResponse)
 async def agent_run(request: TurnRequest):
-    if not os.environ.get("OPENAI_API_KEY"):
-        raise HTTPException(status_code=500, detail="OPENAI_API_KEY environment variable not set")
+    if not os.environ.get("OPENAI_API_KEY") and not os.environ.get("GROQ_API_KEYS") and not os.environ.get("GROQ_API_KEY"):
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY, GROQ_API_KEY, or GROQ_API_KEYS environment variable not set")
         
     # State resets between conversations as per requirement
     conn = create_db()

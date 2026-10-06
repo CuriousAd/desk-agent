@@ -1,10 +1,10 @@
 {
+  "framework": null,
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
+    { "source": "/agent/run", "destination": "/api/index.py" },
     { "source": "/agent/:path*", "destination": "/api/index.py" },
-    { "source": "/agent", "destination": "/api/index.py" },
-    { "source": "/api/:path*", "destination": "/api/index.py" },
-    { "source": "/api", "destination": "/api/index.py" }
+    { "source": "/health", "destination": "/api/index.py" }
   ]
 }

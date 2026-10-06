@@ -41,13 +41,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
-    return {"status": "healthy", "service": "Swasthiq Front Desk API"}
-
 @app.get("/health")
 async def health():
-    return {"status": "healthy"}
+    return {"status": "healthy", "service": "Swasthiq Front Desk API"}
 
 @app.post("/agent/run", response_model=AgentResponse)
 @app.post("/run", response_model=AgentResponse)
